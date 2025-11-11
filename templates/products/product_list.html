@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Product List</h2>
+{% if user.is_authenticated and user.is_vendor %}
+<a href="{% url 'products:product_create' %}" class="btn btn-success mb-3">Add Product</a>
+{% endif %}
+<div class="row">
+    {% for p in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            {% if p.image %}<img src="{{ p.image.url }}" class="card-img-top">{% endif %}
+            <div class="card-body">
+                <h5>{{ p.name }}</h5>
+                <p>{{ p.description|truncatewords:20 }}</p>
+                <strong>${{ p.price }}</strong><br>
+                {% if user == p.owner %}
+                <a href="{% url 'products:product_update' p.pk %}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="{% url 'products:product_delete' p.pk %}" class="btn btn-sm btn-danger">Delete</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <p>No products available.</p>
+    {% endfor %}
+</div>
+{% endblock %}
