@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Your Cart</h2>
+
+    {% if cart_items %}
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.product.price }}</td>
+            <td>₹{{ item.product.price|mul:item.quantity }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="text-end">
+        <a href="{% url 'product_list' %}" class="btn btn-secondary">Continue Shopping</a>
+    </div>
+
+    {% else %}
+    <p class="text-center text-muted">Your cart is empty.</p>
+    {% endif %}
+</div>
+<a href="{% url 'payments:checkout' %}" class="btn btn-success mt-3">
+    Proceed to Checkout
+</a>
+
+
+{% endblock %}

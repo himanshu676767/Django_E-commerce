@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container text-center py-5">
+
+    <h2 class="text-success mb-4">🎉 Payment Successful!</h2>
+
+    <p>Your order has been placed successfully.</p>
+
+    <a href="/products/" class="btn btn-primary mt-3">Continue Shopping</a>
+    <a href="{% url 'orders:download_invoice' order.id %}" class="btn btn-success">
+        Download Invoice
+    </a>
+
+
+</div>
+{% endblock %}

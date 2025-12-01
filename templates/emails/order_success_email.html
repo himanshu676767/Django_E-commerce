@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial;">
+
+<h2 style="color:green;">🎉 Order Placed Successfully!</h2>
+
+<p>Hi {{ user.username }},</p>
+
+
+<p>Your order <strong>#{{ order.id }}</strong> has been placed successfully.</p>
+
+<h3>Order Summary:</h3>
+<ul>
+    <li><strong>Total Amount:</strong> ₹{{ order.total_amount }}</li>
+    <li><strong>Status:</strong> {{ order.status }}</li>
+    <li><strong>Date:</strong> {{ order.created_at }}</li>
+</ul>
+
+<p>Thank you for shopping with us!</p>
+
+</body>
+</html>

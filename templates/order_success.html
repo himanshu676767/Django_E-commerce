@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-5 text-center">
+
+    <h2 class="text-success">🎉 Order Successful!</h2>
+    <p class="lead mt-3">Thank you for your purchase.</p>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <strong>Order Details</strong>
+        </div>
+        <div class="card-body">
+            <p><strong>Order ID:</strong> {{ order.id }}</p>
+            <p><strong>Total Amount:</strong> ₹ {{ order.total_amount }}</p>
+            <p><strong>Status:</strong> {{ order.status }}</p>
+        </div>
+    </div>
+
+    <a href="/" class="btn btn-primary mt-4">Go to Home</a>
+    <a href="{% url 'download_invoice' order.id %}" class="btn btn-secondary mt-4">
+        Download Invoice
+    </a>
+
+</div>
+
+{% endblock %}

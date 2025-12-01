@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from doctest import debug
 
 
 def main():
@@ -20,3 +21,4 @@ def main():
 
 if __name__ == '__main__':
 	main()
+debug=False

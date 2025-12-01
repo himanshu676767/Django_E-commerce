@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+
+<style>
+    .profile-card {
+        max-width: 550px;
+        margin: 60px auto;
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 14px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .profile-icon {
+        width: 90px;
+        height: 90px;
+        margin-bottom: 15px;
+        border-radius: 50%;
+        background: #e9f3ff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .profile-icon i {
+        font-size: 45px;
+        color: #0d6efd;
+    }
+    .profile-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 25px;
+        color: #333;
+    }
+    .info-row {
+        text-align: left;
+        margin-bottom: 18px;
+        font-size: 17px;
+        color: #444;
+        padding: 12px 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+    }
+    .info-row span {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #000;
+    }
+    .action-btns {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 25px;
+    }
+</style>
+
+<div class="profile-card">
+
+    <!-- Profile Icon -->
+    <div class="profile-icon">
+        <i class="bi bi-person-fill"></i>
+    </div>
+
+    <!-- Title -->
+    <h2 class="profile-title">{{ request.user.username|capfirst }}'s Profile</h2>
+
+    <!-- USER INFO -->
+    <div class="text-bg-secondary p-3">Secondary with contrasting color</div>
+    <div class="info-row"><span>Email:</span> {{ request.user.email }}</div>
+    <div class="info-row"><span>Username:</span> {{ request.user.username }}</div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="action-btns">
+
+        <a href="{% url 'accounts:dashboard' %}"
+           class="btn btn-secondary px-4">
+            ⬅ Back
+        </a>
+
+        <form method="POST" action="{% url 'accounts:logout' %}">
+            {% csrf_token %}
+            <button class="btn btn-danger px-4">
+                Logout
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

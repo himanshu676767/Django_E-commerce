@@ -1,0 +1,29 @@
+<h2>📊 E-Commerce Analytics</h2>
+
+<p><b>Total Users:</b> {{ users }}</p>
+<p><b>Total Orders:</b> {{ orders }}</p>
+
+{% if high_selling %}
+<p><b>🔥 Highest Selling Product:</b> {{ high_selling.product_name }}</p>
+<p><b>Sold:</b> {{ high_selling.units_sold }} units</p>
+{% else %}
+<p>No sales yet</p>
+{% endif %}
+<canvas id="salesChart"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    fetch("/orders/api/sales-data/")
+      .then(res => res.json())
+      .then(data => {
+        new Chart(document.getElementById("salesChart"), {
+          type: 'bar',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              data: data.values
+            }]
+          }
+        });
+      });
+</script>

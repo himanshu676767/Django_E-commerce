@@ -1,10 +1,192 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>Welcome, {{ user.username }}!</h2>
-<p>This is your dashboard.</p>
-<a href="{% url 'logout' %}">Logout</a>
-<form method="POST" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <button type="submit">Logout</button>
-</form>
-{% endblock %}
+{% load cart_filters %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            background: #0d6efd;
+            color: white;
+            padding-top: 30px;
+            position: fixed;
+        }
+        .sidebar a {
+            color: #ffffffd9;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: block;
+            transition: 0.3s;
+        }
+        .sidebar a:hover {
+            background: #ffffff22;
+            color: white;
+        }
+        .content {
+            margin-left: 260px;
+            padding: 40px;
+        }
+        .card-custom {
+            border-radius: 15px;
+            transition: 0.3s;
+        }
+        .card-custom:hover {
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+
+<body>
+<!-- SIDEBAR -->
+<div class="sidebar shadow-lg">
+
+    <div class="sidebar-header text-center py-4">
+        <h4 class="fw-bold mb-0">🛒 E-Shop Panel</h4>
+        <small class="text-light">User Dashboard</small>
+    </div>
+
+    <a href="{% url 'products:product_list' %}" class="sidebar-link">
+        <i class="bi bi-box-seam"></i> Products
+    </a>
+
+    <a href="{% url 'carts:cart_detail' %}" class="sidebar-link">
+        <i class="bi bi-cart4"></i> My Cart
+    </a>
+
+    <a href="{% url 'accounts:dashboard' %}" class="sidebar-link">
+        <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+
+    <!-- LOGOUT (POST form) -->
+    <form action="{% url 'accounts:logout' %}" method="POST" class="sidebar-form">
+        {% csrf_token %}
+        <button type="submit" class="sidebar-link logout-btn">
+            <i class="bi bi-door-open"></i> Logout
+        </button>
+    </form>
+</div>
+
+<style>
+    /* SIDEBAR STYLING */
+    .sidebar {
+        width: 260px;
+        height: 100vh;
+        position: fixed;
+        background: #0d6efd; /* Bootstrap Primary Blue */
+        color: white;
+        padding-top: 10px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sidebar-header {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .sidebar-link {
+        padding: 14px 22px;
+        font-size: 16px;
+        color: white;
+        text-decoration: none;
+        display: block;
+        font-weight: 500;
+    }
+
+    .sidebar-link:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+        border-left: 4px solid #fff;
+    }
+
+    .sidebar-form {
+        margin-top: auto;
+        padding: 0;
+    }
+
+    .logout-btn {
+        width: 100%;
+        border: none;
+        background: none;
+        padding: 14px 22px;
+        color: white;
+        text-align: left;
+        font-size: 16px;
+    }
+
+    .logout-btn:hover {
+        background: rgba(255, 0, 0, 0.25);
+        color: #fff;
+        border-left: 4px solid red;
+    }
+</style>
+
+<!-- CONTENT -->
+<div class="content">
+    <h2 class="fw-bold">Welcome, {{ user.username|title }} 👋</h2>
+    <p class="text-muted">Here is your account overview.</p>
+
+    <div class="row mt-4">
+
+        <!-- Products Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow card-custom">
+                <div class="card-body">
+                    <div class="text-bg-success p-3">products</div>
+                    <p class="card-text text-muted">Manage your products easily.</p>
+                    <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-sm">View All</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Account Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow card-custom">
+                <div class="card-body">
+                    <div class="text-bg-primary p-3">Account</div>
+                    <p class="card-text text-muted">Manage your profile.</p>
+                    <a href="{% url 'accounts:profile' %}" class="btn btn-primary btn-sm">Profile</a>
+
+                    <!-- 🔁 REPLACED LOGOUT BUTTON WITH POST FORM -->
+                    <form action="{% url 'accounts:logout' %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm">
+                            Logout
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'accounts:login' %}" class="text-white" style="padding:12px 20px; display:block;">
+            🔑 Login
+        </a>
+
+        <!-- Cart Card -->
+        <div class="col-md-4 mb-3">
+            <div class="card shadow card-custom">
+                <div class="card-body">
+                    <div class="text-bg-secondary p-3">your cart</div>
+                    <p class="card-text text-muted">View products added to cart.</p>
+                    <a href="{% url 'carts:cart_detail' %}" class="btn btn-success btn-sm">View Cart</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <h2 class="mb-4">💳 Select Payment Method</h2>
+
+    <div class="card p-4 shadow-sm">
+
+        <h4>UPI / Wallet Payments</h4>
+        <p>Choose any UPI method and enter your UPI number</p>
+
+        <form action="{% url 'payments:pay_online' %}" method="POST">
+            {% csrf_token %}
+
+            <div class="d-flex gap-4 mb-3">
+
+                <label class="text-center">
+                    <img src="{% static 'img/phonepe.png' %}" width="70">
+                    <br>PhonePe
+                </label>
+
+                <label class="text-center">
+                    <img src="{% static 'img/gpay.png' %}" width="70">
+                    <br>Google Pay
+                </label>
+
+                <label class="text-center">
+                    <img src="{% static 'img/paytm.png' %}" width="70">
+                    <br>Paytm
+                </label>
+            </div>
+
+            <input type="text" class="form-control mb-3" name="upi_id" placeholder="Enter your UPI ID (ex: number@upi)" required>
+
+            <button class="btn btn-primary w-100">Pay Now</button>
+        </form>
+
+        <hr>
+
+        <h4 class="mt-3">Pay with PayPal</h4>
+
+        <a href="https://www.paypal.com/pay" target="_blank" class="btn btn-warning w-100 mt-2">
+            Pay with PayPal
+        </a>
+
+        <hr>
+
+        <h4 class="mt-3">Cash on Delivery</h4>
+
+        <a href="{% url 'payments:payment_failed' %}" class="btn btn-secondary w-100 mt-2">
+            Cash on Delivery (Demo Only)
+        </a>
+
+    </div>
+</div>
+{% endblock %}
+

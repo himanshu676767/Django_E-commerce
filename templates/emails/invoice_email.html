@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+        .order-details, .items-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+        }
+        .items-table th, .items-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .items-table th {
+            background-color: #f2f2f2;
+        }
+        .total {
+            margin-top: 10px;
+            text-align: right;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #555;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Invoice for Order #{{ order.id }}</h2>
+    </div>
+
+    <p>Hi {{ order.user.username }},</p>
+    <p>Thank you for your order. Please find attached the invoice for your order #{{ order.id }}.</p>
+
+    <table class="order-details">
+        <tr>
+            <td><strong>Invoice Date:</strong> {{ order.created_at|date:"d-M-Y" }}</td>
+            <td><strong>Due Date:</strong> {{ order.created_at|date:"d-M-Y"|add:"7" }}</td>
+        </tr>
+        <tr>
+            <td><strong>Customer Name:</strong> {{ order.user.username }}</td>
+            <td><strong>Email:</strong> {{ order.user.email }}</td>
+        </tr>
+    </table>
+
+    <h3>Items</h3>
+    <table class="items-table">
+        <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Total</th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }}</td>
+            <td>{{ item.total }}</td>
+        </tr>
+        {% endfor %}
+
+        <p><strong>Subtotal:</strong> {{ subtotal }}</p>
+        <p><strong>Tax (18%):</strong> {{ tax }}</p>
+        <p><strong>Grand Total:</strong> {{ grand_total }}</p>
+
+
+        <h3>Payment Details</h3>
+    <p>Bank: STATE BANK OF INDIA</p>
+    <p>Account No: 17443223456123</p>
+    <p>UPI / Paytm ID: 7725334456@bank</p>
+
+    <p>Notes: Please contact support@example.com for any queries.</p>
+
+    <div class="footer">
+        <p>Thank you for your business!</p>
+        <p>CROMA</p>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,8 +1,11 @@
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
 
 load_dotenv()
+
+SESSION_SAVE_EVERY_REQUEST = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -11,15 +14,27 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
-	"django.contrib.admin",
-	"django.contrib.auth",
-	"django.contrib.contenttypes",
-	"django.contrib.sessions",
-	"django.contrib.messages",
-	"django.contrib.staticfiles",
-	"accounts",
-	"products",
+	'django.contrib.admin',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+
+	# Third party apps
+	'rest_framework',
+	'rest_framework_simplejwt',  # ✅ correct module
+
+	# Local apps
+	'accounts',
+	'products',
+	'orders',
+	'analytics',
+	'api',
+	'carts',
 ]
+
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 MIDDLEWARE = [
 	"django.middleware.security.SecurityMiddleware",
@@ -62,11 +77,37 @@ DATABASES = {
 	}
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'himansu.opsstation@gmail.com'   # ✔ correct email
+EMAIL_HOST_PASSWORD = 'edauvxtakusxjkne'
+DEFAULT_FROM_EMAIL = "himansu.opsstation@gmail.com"
+
 AUTH_USER_MODEL = "accounts.User"
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+MESSAGE_TAGS = {
+	messages.DEBUG: 'secondary',
+	messages.INFO: 'info',
+	messages.SUCCESS: 'success',
+	messages.WARNING: 'warning',
+	messages.ERROR: 'danger',
+}
+REST_FRAMEWORK = {
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework_simplejwt.authentication.JWTAuthentication',
+	),
+}
+
+MONGO_URI = "mongodb://localhost:27017/"
+MONGO_DB_NAME = "ecommerce"

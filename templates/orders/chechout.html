@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Checkout</h2>
+
+    <!-- Cart Items -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <strong>Your Order Items</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+            {% for item in items %}
+            <li class="list-group-item d-flex justify-content-between">
+                <div>
+                    <strong>{{ item.product.name }}</strong><br>
+                    Qty: {{ item.qty }}
+                </div>
+                <span>₹ {{ item.product.price|floatformat:2 }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Price Summary -->
+    <div class="card mb-4">
+        <div class="card-header"><strong>Price Summary</strong></div>
+        <div class="card-body">
+            <p>Subtotal: <strong>₹ {{ total|floatformat:2 }}</strong></p>
+            <p>Discount: <strong>₹ {{ discount|floatformat:2 }}</strong></p>
+            <p>Final Total: <strong>₹ {{ final_total|floatformat:2 }}</strong></p>
+        </div>
+    </div>
+
+    <!-- Coupon Apply -->
+    <div class="card mb-4">
+        <div class="card-header"><strong>Have a Coupon?</strong></div>
+        <div class="card-body">
+            <form action="{% url 'orders:apply_coupon' %}" method="POST" class="d-flex">
+                {% csrf_token %}
+                <input type="text" name="code" class="form-control me-2" placeholder="Enter coupon code">
+                <button class="btn btn-primary">Apply</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Proceed to Payment -->
+    <div class="text-end">
+        <a href="{% url 'payments:checkout' %}" class="btn btn-success btn-lg">
+            Proceed to Payment
+        </a>
+    </div>
+</div>
+
+{% endblock %}

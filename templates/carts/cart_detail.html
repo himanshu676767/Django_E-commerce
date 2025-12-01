@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Your Cart 🛒</h2>
+
+    {% if cart_items %}
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead class="table-light">
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price (₹)</th>
+                <th>Total (₹)</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>
+                    <strong>{{ item.product.name }}</strong>
+                </td>
+
+                <td>{{ item.quantity }}</td>
+
+                <td>{{ item.product.price }}</td>
+
+                <td>{{ item.product.price|floatformat:2 }}</td>
+
+                <td>
+                    <a href="{% url 'carts:remove_from_cart' item.product.id %}"
+                       class="btn btn-sm btn-danger">
+                        Remove
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ✔ Redirect to PAYMENT CHECKOUT (Correct Fix) -->
+    <div class="text-end">
+        <a href="{% url 'payments:checkout' %}" class="btn btn-primary btn-lg">
+            Proceed to Checkout →
+        </a>
+    </div>
+
+    {% else %}
+    <p class="text-center text-muted fs-5">Your cart is empty.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+<h1>📊 Sales Analytics</h1>
+
+<h3>Total Orders: {{ total_orders }}</h3>
+<h3>Total Revenue: ₹{{ total_revenue }}</h3>
+
+<hr>
+
+<h2>Top Selling Products</h2>
+<ul>
+    {% for name, qty in top_products.items %}
+    <li>{{ name }} – {{ qty }} sold</li>
+    {% empty %}
+    <li>No product data yet.</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h2>👤 User Analytics</h2>
+
+<p><strong>Total Registered Users:</strong> {{ total_users }}</p>
+<p><strong>Users Registered Today:</strong> {{ today_users }}</p>
+<p><strong>Currently Logged-in Active Users:</strong> {{ active_users }}</p>
+
+<hr>
+
+<h3>All Orders</h3>
+<table border="1" cellpadding="6">
+    <tr>
+        <th>Product</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+        <th>Created</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.product.name }}</td>
+        <td>{{ order.quantity }}</td>
+        <td>{{ order.total_price }}</td>
+        <td>{{ order.created }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No orders available</td></tr>
+    {% endfor %}
+</table>
+

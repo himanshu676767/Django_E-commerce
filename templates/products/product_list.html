@@ -1,27 +1,65 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 {% block content %}
-<h2>Product List</h2>
-{% if user.is_authenticated and user.is_vendor %}
-<a href="{% url 'products:product_create' %}" class="btn btn-success mb-3">Add Product</a>
-{% endif %}
-<div class="row">
-    {% for p in products %}
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            {% if p.image %}<img src="{{ p.image.url }}" class="card-img-top">{% endif %}
-            <div class="card-body">
-                <h5>{{ p.name }}</h5>
-                <p>{{ p.description|truncatewords:20 }}</p>
-                <strong>${{ p.price }}</strong><br>
-                {% if user == p.owner %}
-                <a href="{% url 'products:product_update' p.pk %}" class="btn btn-sm btn-primary">Edit</a>
-                <a href="{% url 'products:product_delete' p.pk %}" class="btn btn-sm btn-danger">Delete</a>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Products</h2>
+    <form method="GET" class="d-flex mb-4">
+        <input type="text" name="q" class="form-control me-2"
+               value="{{ query }}" placeholder="Search products...">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </form>
+    <div class="row">
+        {% for product in page_obj %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100 shadow-sm">
+
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static 'images/no-image.png' %}" class="card-img-top" alt="No Image">
                 {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="text-muted">₹{{ product.price }}</p>
+                    <!-- FIXED BUTTONS -->
+                    <a href="{% url 'carts:add_to_cart' product.id %}" class="btn btn-primary btn-sm">
+                        Add
+                    </a>
+
+                    <a href="{% url 'products:buy_now' product.id %}" class="btn btn-success btn-sm">
+                        Buy
+                    </a>
+
+                </div>
             </div>
         </div>
+        {% empty %}
+        <p class="text-center text-muted">No products available.</p>
+        {% endfor %}
     </div>
-    {% empty %}
-    <p>No products available.</p>
-    {% endfor %}
 </div>
+<!-- Pagination -->
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if query %}&q={{ query }}{% endif %}">Previous</a>
+        </li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <a class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</a>
+        </li>
+
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if query %}&q={{ query }}{% endif %}">Next</a>
+        </li>
+        {% endif %}
+
+    </ul>
+</nav>
+
 {% endblock %}
